@@ -8,9 +8,9 @@ internal class BlueRibbonInfo
     {
         Url = $"www.bluer.co.kr/restaurants/{info.Id}";
         Name = info.Name;
-        Year = info.Year;
-        BookYear = info.BookYear;
-        RibbonType = info.RibbonType;
+        Year = info.Year > 1900 && info.Year < 3000 ? info.Year : null;
+        BookYear = info.BookYear > 1900 && info.BookYear < 3000 ? info.BookYear : null;
+        RibbonType = info.RibbonType.ToString();
         NewAddress = info.NewAddress;
         OldAddress = info.OldAddress;
         DetailAddress = info.DetailAddress;
@@ -27,13 +27,13 @@ internal class BlueRibbonInfo
     string Name { get; init; }
     
     [JsonProperty("Year")]
-    int Year { get; init; }
+    int? Year { get; init; }
 
     [JsonProperty("BookYear")]
-    int BookYear { get; init; }
+    int? BookYear { get; init; }
 
     [JsonProperty("RibbonType")]
-    RibbonKindType RibbonType { get; init; }
+    string RibbonType { get; init; }
     
     [JsonProperty("NewAddress")]
     string NewAddress { get; init; }

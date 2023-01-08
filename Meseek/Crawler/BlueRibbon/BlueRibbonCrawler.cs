@@ -14,43 +14,37 @@ internal class BlueRibbonCrawler
 {
     private const string BlueRibbonUrl = "http://www.bluer.co.kr/api/v1/restaurants";
 
-    private const int pageSize = 30;
+    private const int pageSize = 500;
 
     private Dictionary<int, BlueRibbonResponseUnitInfo> responseInfos = new();
 
     public async Task Crawl()
     {
-        var index = 0;
+        var page = 0;
         while(true)
         {
-            var response = await Request(index);
+            var response = await Request(page);
             var infos = Parse(response);
             await Task.Delay(1000);
             foreach (var info in infos)
             {
                 responseInfos.TryAdd(info.Id, info);
             }
-            
-            if(infos.Count == 0)
+
+            page ++;
+            Console.WriteLine($"Crawl Item Count:{responseInfos.Count}. Current Page: {page}");
+
+            if (infos.Count == 0)
             {
                 break;
             }
-
-            if(responseInfos.Count > pageSize)
-            {
-                break;
-            }
-
-            index += infos.Count;
-            Console.WriteLine($"Crawl Item Count:{responseInfos.Count}. Current Index {index}");
         }
 
         Save();
     }
 
-    private async Task<JObject> Request(int index)
+    private async Task<JObject> Request(int page)
     {
-        var page = index / pageSize;
         // set query info 
         var queryInfo = new BlueRibbonQueryInfo(page, pageSize);
 
@@ -87,7 +81,7 @@ internal class BlueRibbonCrawler
         var path = Path.Combine(Program.GetThisFolderPath(), "restaurants.json");
         using (StreamWriter file = File.CreateText(path))
         {
-            var infos = responseInfos.Values.Select(info => new BlueRibbonInfo(info));
+            var infos = responseInfos.Values.OrderBy(info => info.Id).Select(info => new BlueRibbonInfo(info));
             string json = JsonConvert.SerializeObject(infos, Formatting.Indented);
             //serialize object directly into file stream
             file.Write(json);
