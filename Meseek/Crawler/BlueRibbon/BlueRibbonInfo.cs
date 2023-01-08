@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace Meseek.Crawler.BlueRibbon;
 
@@ -10,7 +11,7 @@ internal class BlueRibbonInfo
         Name = info.Name;
         Year = info.Year > 1900 && info.Year < 3000 ? info.Year : null;
         BookYear = info.BookYear > 1900 && info.BookYear < 3000 ? info.BookYear : null;
-        RibbonType = info.RibbonType.ToString();
+        RibbonType = info.RibbonType;
         NewAddress = info.NewAddress;
         OldAddress = info.OldAddress;
         DetailAddress = info.DetailAddress;
@@ -20,39 +21,32 @@ internal class BlueRibbonInfo
         Zone2 = info.Zone2;
     }
 
-    [JsonProperty("Url")]
-    string Url { get; init; }
+    public BlueRibbonInfo()
+    {
+    }
 
-    [JsonProperty("Name")]
-    string Name { get; init; }
+    public string Url { get; init; }
+
+    public string Name { get; init; }
     
-    [JsonProperty("Year")]
-    int? Year { get; init; }
+    public int? Year { get; init; }
 
-    [JsonProperty("BookYear")]
-    int? BookYear { get; init; }
+    public int? BookYear { get; init; }
 
-    [JsonProperty("RibbonType")]
-    string RibbonType { get; init; }
+    [JsonConverter(typeof(StringEnumConverter))]
+    public RibbonKindType RibbonType { get; init; }
     
-    [JsonProperty("NewAddress")]
-    string NewAddress { get; init; }
+    public string NewAddress { get; init; }
 
-    [JsonProperty("OldAddress")]
-    string OldAddress { get; init; }
+    public string OldAddress { get; init; }
 
-    [JsonProperty("DetailAddress")]
-    string DetailAddress { get; init; }
+    public string DetailAddress { get; init; }
 
-    [JsonProperty("Longitude")]
-    float Longitude { get; init; }
+    public float Longitude { get; init; }
 
-    [JsonProperty("Latitude")]
-    float Latitude { get; init; }
+    public float Latitude { get; init; }
 
-    [JsonProperty("Zone1")]
-    string Zone1 { get; init; }
+    public string Zone1 { get; init; }
 
-    [JsonProperty("Zone2")]
-    string Zone2 { get; init; }
+    public string Zone2 { get; init; }
 }

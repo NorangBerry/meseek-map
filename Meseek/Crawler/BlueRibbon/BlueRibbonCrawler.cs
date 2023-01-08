@@ -89,4 +89,11 @@ internal class BlueRibbonCrawler
 
         Console.WriteLine($"Save To {path}");
     }
+
+    public static IReadOnlyList<BlueRibbonInfo> Load()
+    {
+        var path = Path.Combine(Program.GetThisFolderPath(), "restaurants.json");
+        var text = File.ReadAllText(path);
+        return JsonConvert.DeserializeObject<List<BlueRibbonInfo>>(text) ?? new();
+    }
 }
